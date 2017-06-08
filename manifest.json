@@ -1,0 +1,7 @@
+{
+  "name": "PuppIMDB",
+  "short_name": "PuppIMDB",
+  "description": "Puppy based IMDB",
+  "start_url": "/",
+  "display": "standalone"
+}

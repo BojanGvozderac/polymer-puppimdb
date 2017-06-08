@@ -1,0 +1,189 @@
+<link rel="import" href="../../../bower_components/polymer/polymer-element.html">
+
+<dom-module id="pup-details">
+
+    <template>
+        <style>
+             :host {
+                position: fixed;
+                z-index: 99;
+                top: -100%;
+                left: 50%;
+
+                display: flex;
+                flex-direction: column;
+
+                height: 90%;
+                width: 80%;
+
+                font-family: var(--app-font-family);
+
+                background-color: #fff;
+                box-shadow: 0 4px 12px #000;
+
+                transition: all .75s ease;
+            }
+
+             :host(.display-details) {
+                top: 50%;
+                transform: translate3d(-50%, -50%, 0);
+            }
+
+            .image-container {
+                position: relative;
+
+                flex: 0 0 180px;
+                background: burlywood;
+
+                color: #fff;
+                text-align: center;
+            }
+
+            .main-image {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+
+                width: 125px;
+
+                transform: translateX(-50%);
+            }
+
+            .info-container {
+                flex: 1 0 auto;
+
+                display: flex;
+                flex-direction: column;
+
+                padding: 20px;
+            }
+
+            .info__top {
+                flex: 0 0 40px;
+                margin-top: 90px;
+
+                display: flex;
+                flex-direction: row;
+            }
+
+            .info__top-item {
+                flex: 1 1 auto;
+            }
+
+            .info__summary {
+                flex: 1 0 auto;
+            }
+
+            .close-button-container {
+                margin-top: auto;
+                text-align: right;
+            }
+
+            .close-button {
+                position: relative;
+
+                display: inline-block;
+
+                flex: 0 0 auto;
+                align-self: flex-end;
+
+                border: none;
+                background: transparent;
+
+                margin-top: auto;
+                margin-bottom: 1em;
+                margin-right: 10px;
+                padding: 10px 25px;
+
+                font-size: 1.1em;
+                font-weight: bold;
+
+                cursor: pointer;
+
+                transition: all .3s ease;
+            }
+            
+            .close-button::after {
+                content: '';
+                
+                position: absolute;
+                top: 100%;
+                right: 0;
+
+                width: 0;
+                height: 2px;
+
+                background-color: var(--color-burlywood);
+
+                transition: width .3s ease;
+            }
+
+            .close-button:hover::after {
+                width: 100%;
+            }
+
+            .color-burlywood {
+                color: var(--color-burlywood);
+            }
+        </style>
+
+        <div class="image-container">
+
+            <h2 class="details-title">[[show.name]]</h2>
+            <img class="main-image" src$="[[show.image.medium]]" alt="">
+
+        </div>
+
+        <div class="info-container">
+
+            <div class="info__top">
+                <p class="info__top-item"><span class="color-burlywood">Genre:</span> [[_printShowGenre(show)]]</p>
+                <p class="info__top-item"><span class="color-burlywood">Language:</span> [[show.language]]</p>
+                <p class="info__top-item"><span class="color-burlywood">Type:</span> [[show.type]]</p>
+            </div>
+
+            <div class="info__summary">
+                <p><span class="color-burlywood">Summary:</span>[[show.summary]]</p>
+            </div>
+
+            <div class="close-button-container">
+                <button class="close-button" on-click="_closeModal">Close</button>
+            </div>
+
+        </div>
+
+    </template>
+
+
+    <script>
+        /**
+        * @CustomElement
+        * @polymer
+        */
+        class PupDetails extends Polymer.Element {
+            static get is() { return 'pup-details'; }
+            static get properties() {
+                return {
+                    show: Object,
+                    value: {}
+                }
+            }
+
+            connectedCallback() {
+                super.connectedCallback();
+            }
+
+            _printShowGenre(show) {
+             return show.genres[0] || 'N/A';
+         }
+
+         _closeModal() {
+             this.dispatchEvent(new CustomEvent('close-modal-click'));
+         }
+ 
+        }
+
+        customElements.define(PupDetails.is, PupDetails);
+    </script>
+
+</dom-module>

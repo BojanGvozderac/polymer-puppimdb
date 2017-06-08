@@ -1,0 +1,143 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/polymer/lib/elements/dom-repeat.html">
+
+
+<link rel="import" href="./components/pup-show-card.html">
+<link rel="import" href="./components/pup-details.html">
+<link rel="import" href="./services/pup.service.html">
+
+<dom-module id="pup-app">
+  <template>
+    <style>
+       :host {
+        display: block;
+        height: 100%;
+
+        background-color: #efefef;
+
+        --app-font-family: 'Montserrat', sans-serif;
+        --color-burlywood: burlywood;
+      }
+
+      .app-title-container {
+        background-color: #fff;
+
+        text-align: center;
+      }
+
+      .app-title {
+        margin: 0;
+        padding: .5em;
+
+        font-family: var(--app-font-family);
+      }
+
+      .show-list {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+
+        width: 80%;
+        height: 100%;
+        margin: auto;
+      }
+    </style>
+
+    <div class="app-title-container">
+      <h1 class="app-title">[[appName]]</h1>
+    </div>
+
+    <pup-details show={{showDetails}} on-close-modal-click="_closeModalHandler" class$="{{_displayDetails(displayDetails)}}"></pup-details>
+
+    <div class="show-list">
+      <template is="dom-repeat" items="{{showList}}" as="show">
+        <pup-show-card show="[[show]]" on-details-click="_detailsHandler"></pup-show-card>
+      </template>
+    </div>
+
+  </template>
+
+  <script>
+    /**
+     * @customElement
+     * @polymer
+     */
+
+    /*** check if I can import JS here ***/
+    //  import
+
+    class PupApp extends Polymer.Element {
+      static get is() { return 'pup-app'; }
+      static get properties() {
+        return {
+          appName: {
+            type: String,
+            value: 'PuppIMDB'
+          },
+          showList: {
+            type: Array,
+            value() { return []; }
+          },
+          displayDetails: {
+            type: Boolean,
+            value: false
+          },
+          showDetails: {
+            type: Object,
+            value: {
+              name: '',
+              genres: []
+            }
+          }
+        };
+      }
+
+      connectedCallback() {
+        super.connectedCallback();
+
+        fetchShows()
+          .then(shows => {
+            this.showList = shows.map(item => item.show);
+          })
+          .catch(error => {
+            console.log(error)
+          });
+
+        // const apiURL = 'http://api.tvmaze.com/search/shows?q=puppy';
+
+        // fetch(apiURL)
+        //   .then(result => {
+        //     if (result.ok) {
+        //       return result.json();
+        //     }
+
+        //     throw new Error('Failed to fetch puppy shows :(');
+        //   })
+        //   .then(shows => {
+        //     this.showList = shows.map(item => item.show);
+        //   })
+        //   .catch(error => {
+        //     console.log(error)
+        //   });;
+
+      }
+
+      _detailsHandler(event) {
+        console.log(event)
+        this.showDetails = event.detail;
+        this.displayDetails = true;
+      }
+
+      _closeModalHandler(event) {
+        this.displayDetails = false;
+      }
+
+      _displayDetails(displayDetails) {
+        return displayDetails ? 'display-details' : '';
+      }
+
+    }
+
+    window.customElements.define(PupApp.is, PupApp);
+  </script>
+</dom-module>

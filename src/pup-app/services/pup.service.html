@@ -1,0 +1,14 @@
+<script>
+    function fetchShows() {
+        const apiURL = 'http://api.tvmaze.com/search/shows?q=puppy';
+
+        return fetch(apiURL)
+          .then(result => {
+            if (result.ok) {
+              return result.json();
+            }
+
+            throw new Error('Failed to fetch puppy shows :(');
+          });
+    }
+</script>

@@ -1,0 +1,166 @@
+<link rel="import" href="../../../bower_components/polymer/polymer-element.html">
+
+<dom-module id="pup-show-card">
+
+    <template>
+
+        <style>
+            :host {
+                display: block;
+                box-sizing: border-box;
+
+                flex: 1 1 calc(50% - 20px);
+                margin: 10px;
+                border-radius: 2px;
+
+                background-color: #fff;
+
+                overflow: hidden;
+            }
+
+            .content-container {
+                display: flex;
+                flex-direction: row;
+            }
+
+            :host(:hover) .content__image {
+                transform: scale(1.1) rotateZ(.05rad);
+            }
+
+            .content__image-container {
+                flex: 0 0 210px;
+
+                overflow: hidden;
+            }
+
+            .content__image {
+                height: 100%;
+                width: 100%;
+
+                transition: all .3s ease;
+            }
+
+            .content__info-container {
+                flex: 1 1 auto;
+                margin-left: 10px;
+
+                display: flex;
+                flex-direction: column;
+            }
+
+            .content__info-text {
+                margin-bottom: 0;
+
+                font-family: var(--app-font-family);
+            }
+
+            .content__info-details-button {
+                position: relative;
+
+                display: inline-block;
+
+                flex: 0 0 auto;
+                align-self: flex-end;
+
+                border: none;
+                background: transparent;
+
+                margin-top: auto;
+                margin-bottom: 1em;
+                margin-right: 10px;
+                padding: 10px 25px;
+
+                font-size: 1.1em;
+                font-weight: bold;
+
+                cursor: pointer;
+
+                transition: all .3s ease;
+            }
+            
+            .content__info-details-button::after {
+                content: '';
+                
+                position: absolute;
+                top: 100%;
+                right: 0;
+
+                width: 0;
+                height: 2px;
+
+                background-color: var(--color-burlywood);
+
+                transition: width .3s ease;
+            }
+
+            .content__info-details-button:hover::after {
+                width: 100%;
+            }
+
+            .flex-filler {
+                flex: 1 1 100%;
+            }
+
+            .color-burlywood {
+                color: var(--color-burlywood);
+            }
+        </style>
+
+        <div class="content-container">
+            <div class="content__image-container">
+                <img class="content__image" src="[[show.image.medium]]" alt="">
+            </div>
+
+            <div class="content__info-container">
+
+                <p class="content__info-text"><span class="color-burlywood">Title:</span> [[show.name]]</p>
+
+                <p class="content__info-text"><span class="color-burlywood">Genre:</span> [[_printShowGenre(show)]]</p>
+
+                <p class="content__info-text"><span class="color-burlywood">Language:</span> [[show.language]]</p>
+
+                <button class="content__info-details-button" on-click="_showDetails">Details</button>
+
+            </div>
+        </div>
+        
+    </template>
+
+    <script>
+    /**
+     * @customElement
+     * @polymer
+     */
+
+     class PupShowCard extends Polymer.Element {
+         static get is() { return 'pup-show-card'; }
+         static get properties() {
+             return {
+                show: {
+                    type: Object,
+                    value() { return {}; }
+                },
+                selectionHandler: {
+                    type: Function
+                }
+             }
+         }
+
+         connectedCallback() {
+             super.connectedCallback();
+         }
+
+         _printShowGenre(show) {
+             return show.genres[0] || 'N/A';
+         }
+
+         _showDetails() {
+            this.dispatchEvent(new CustomEvent('details-click', { detail: this.show }));
+         }
+        
+     }
+
+     customElements.define(PupShowCard.is, PupShowCard);
+    </script>
+
+</dom-module>
